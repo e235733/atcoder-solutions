@@ -4,6 +4,9 @@
 # VS Code の設定
 .vscode/
 
+# AC Library
+acl/
+
 # コンパイル済みの実行ファイル
 *.out
 *.exe
