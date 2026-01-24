@@ -3,28 +3,6 @@ using namespace std;
 using ll = long long;
 #define rep(i, n) for (int i = 0; i < (n); ++i)
 
-#ifdef LOCAL
-    template <typename T>
-    ostream& operator<<(ostream& os, const vector<T>& v) {
-        os << "{";
-        for (int i = 0; i < v.size(); i++) {
-            os << v[i] << (i + 1 != v.size() ? ", " : "");
-        }
-        os << "}";
-        return os;
-    }
-    #define debug(...) cerr << "[" << #__VA_ARGS__ << "]: ", debug_out(__VA_ARGS__)
-    void debug_out() { cerr << endl; }
-    template <typename Head, typename... Tail>
-    void debug_out(Head H, Tail... T) {
-        cerr << H;
-        if (sizeof...(T) > 0) cerr << ", ";
-        debug_out(T...);
-    }
-#else
-    #define debug(...)
-#endif
-
 int main() {
     cin.tie(nullptr);
     ios::sync_with_stdio(false);
@@ -35,8 +13,6 @@ int main() {
 
     int n, w;
     cin >> n >> w;
-
-    debug(n, w);
 
     // 最初の状態
     vector<map<int, int>> blocks(w+1);
@@ -56,7 +32,6 @@ int main() {
             min_num = height;
         }
     }
-    debug(min_num);
 
     // 最大高さが 0 なら、全ての結果が Yes
     if (min_num == 0) {
@@ -87,7 +62,6 @@ int main() {
             }
         }
     }
-    debug(max_height);
 
     // 各ブロックが消える時刻
     vector<int> rm_time(n+1, 0);
@@ -107,7 +81,6 @@ int main() {
             order++;
         }
     }
-    debug(rm_time);
 
     int q;
     cin >> q;
