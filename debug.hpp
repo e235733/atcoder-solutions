@@ -8,7 +8,11 @@ template <typename T> ostream& operator<<(ostream& os, const vector<T>& v);
 template <typename T> ostream& operator<<(ostream& os, const deque<T>& v);
 template <typename T> ostream& operator<<(ostream& os, const set<T>& v);
 template <typename T> ostream& operator<<(ostream& os, const multiset<T>& v);
+template <typename T> ostream& operator<<(ostream& os, const unordered_set<T>& v);
+template <typename T> ostream& operator<<(ostream& os, const unordered_multiset<T>& v);
 template <typename T, typename U> ostream& operator<<(ostream& os, const map<T, U>& m);
+template <typename T, typename U> ostream& operator<<(ostream& os, const unordered_map<T, U>& m);
+template <typename T, typename U> ostream& operator<<(ostream& os, const unordered_multimap<T, U>& m);
 template <typename T> ostream& operator<<(ostream& os, queue<T> q);
 template <typename T> ostream& operator<<(ostream& os, stack<T> s);
 template <typename T> ostream& operator<<(ostream& os, priority_queue<T> q);
@@ -38,12 +42,16 @@ void debug_print_container(ostream& os, const T& v, string_view open, string_vie
 template <typename T> ostream& operator<<(ostream& os, const vector<T>& v) { debug_print_container(os, v, "[", "]"); return os; }
 template <typename T> ostream& operator<<(ostream& os, const deque<T>& v) { debug_print_container(os, v, "[", "]"); return os; }
 
-// set, multiset: {a, b, c}
+// set, multiset, unordered_set, unordered_multiset: {a, b, c}
 template <typename T> ostream& operator<<(ostream& os, const set<T>& v) { debug_print_container(os, v, "{", "}"); return os; }
 template <typename T> ostream& operator<<(ostream& os, const multiset<T>& v) { debug_print_container(os, v, "{", "}"); return os; }
+template <typename T> ostream& operator<<(ostream& os, const unordered_set<T>& v) { debug_print_container(os, v, "{", "}"); return os; }
+template <typename T> ostream& operator<<(ostream& os, const unordered_multiset<T>& v) { debug_print_container(os, v, "{", "}"); return os; }
 
-// map: {(k, v), (k, v)}
+// map, unordered_map, unordered_multimap: {(k, v), (k, v)}
 template <typename T, typename U> ostream& operator<<(ostream& os, const map<T, U>& m) { debug_print_container(os, m, "{", "}"); return os; }
+template <typename T, typename U> ostream& operator<<(ostream& os, const unordered_map<T, U>& m) { debug_print_container(os, m, "{", "}"); return os; }
+template <typename T, typename U> ostream& operator<<(ostream& os, const unordered_multimap<T, U>& m) { debug_print_container(os, m, "{", "}"); return os; }
 
 // queue, stack, priority_queue (コピーして中身を出す)
 template <typename T> ostream& operator<<(ostream& os, queue<T> q) {
