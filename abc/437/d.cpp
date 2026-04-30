@@ -1,102 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-#define rep(i, n) for (int i = 0; i < (n); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+
+#ifndef LOCAL
+#define debug(...)
+#endif
 
 int main() {
     cin.tie(nullptr);
     ios::sync_with_stdio(false);
 
-    #ifndef ONLINE_JUDGE
+    #ifdef LOCAL
         freopen("input.txt", "r", stdin);
     #endif
 
     int n, m;
     cin >> n >> m;
 
-    map<int, int> freq_A; // Aの値ごとの登場回数
-    ll sum_A = 0; // 全てのAの合計
-    rep(i, n) {
-        int a;
-        cin >> a;
-        freq_A[a]++;
-        sum_A += a;
+    vector<ll> a(n), b(m), sum_b(m+1);
+    rep (i, n) {
+        cin >> a[i];
     }
-
-    map<int, int> freq_B; // Bの値ごとの登場回数
-    ll sum_B = 0; // 全てのBの合計
-    rep(i, m) {
-        int b;
-        cin >> b;
-        freq_B[b]++;
-        sum_B += b;
+    rep (i, m) {
+        cin >> b[i];
     }
-
-    map<int, pair<int, ll>> sum_a_to_end; // 登場したAの特定の値から最高値までの合計
-    int num_a_to_end = n; 
-    sum_a_to_end[0] = {num_a_to_end, sum_A};
-    //cout << sum_A << endl;
-    ll prev_sum = sum_A;
-    for (auto ap : freq_A) {
-        int current_value = ap.first;
-        int current_num = ap.second;
-        ll current_sum = prev_sum - 1LL * current_value * current_num;
-
-        num_a_to_end -= current_num;
-        sum_a_to_end[current_value] = {num_a_to_end, current_sum}; 
-        //cout << num_a_to_end << ' ' << current_sum << endl;
-        prev_sum = current_sum;
+    sort(b.begin(), b.end());
+    rep (i, m) {
+        sum_b[i+1] = sum_b[i] + b[i];
     }
+    debug(b);
     
-    // Bについて小さい順に差を合算していく
-    ll sum_diff = 0;
-    for (auto bp : freq_B) {
-        int value_b = bp.first;
-        int num_b = bp.second;
-        int prev_value_a = 0;
-        //cout << "about " << value_b << endl;
-
-        bool b_over_a = true;
-        for (auto app : sum_a_to_end) {
-            int value_a = app.first;
-            //cout << "with " << value_a << endl;
-            if (value_a == 0) {
-                continue;
-            }
-            else if (value_a >= value_b) {
-                //cout << "a >= b" << endl;
-                // bより左側の和を求める
-                ll left_sum = sum_a_to_end.at(0).second - sum_a_to_end.at(prev_value_a).second;
-                int left_num = sum_a_to_end.at(0).first - sum_a_to_end.at(prev_value_a).first;
-                ll left_diff_sum = 1LL * value_b * left_num - left_sum;
-                // bより右側の和を求める
-                ll right_sum = sum_a_to_end.at(prev_value_a).second;
-                int right_num = sum_a_to_end.at(prev_value_a).first;
-                ll right_diff_sum = right_sum - 1LL * value_b * right_num;
-
-                //cout << "left_diff_sum:" << left_diff_sum << ", right_diff_sum:" << right_diff_sum << endl;
-                sum_diff += (left_diff_sum + right_diff_sum) * num_b;
-                sum_diff %= 998244353;
-                b_over_a = false;
-                break;
+    ll result = 0;
+    rep (i, n) {
+        debug(a[i]);
+        // 2分探索で a 以上で最小の b の位置を求める
+        int l = -1;
+        int r = m;
+        while (r > l + 1) {
+            int mid = (l + r) / 2;
+            if (b[mid] >= a[i]) {
+                r = mid;
             }
             else {
-                if (prev_value_a != 0) {
-                    sum_a_to_end.erase(prev_value_a);
-                    //cout << "deleted_key:" << prev_value_a << endl;
-                }
-                prev_value_a = value_a;
+                l = mid;
             }
         }
-        if (b_over_a) {
-            cout << "b > a" << endl;
-            sum_diff += (1LL * value_b * sum_a_to_end.at(0).first - sum_a_to_end.at(0).second) * num_b;
-            sum_diff %= 998244353;
-        }
-        //cout << "sum_diff:" << sum_diff << endl;
-    }
+        debug(r, b[l], b[r]);
 
-    cout << sum_diff << endl;
+        ll u = a[i] * r - sum_b[r];
+        ll v = sum_b[m] - sum_b[r] - a[i] * (m - r);
+        result += u + v;
+        result %= 998244353;
+    }
+    cout << result << '\n';
 
     return 0;
 }
